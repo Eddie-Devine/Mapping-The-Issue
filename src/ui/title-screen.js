@@ -1,4 +1,4 @@
-// The title screen from DESIGN.md §4: a ROOTS & BRANCHES logo built from pixel leaves over the
+// The title screen from DESIGN.md §4: a MAPPING THE ISSUE logo built from pixel leaves over the
 // Surface, with a blinking PRESS START. It shows once per visit. Scrolling, tapping, or any key
 // starts the game too, so it never stands in anyone's way.
 import intro from '../data/intro.json';
@@ -8,7 +8,7 @@ import { P, fill, text, textWidth } from '../scenes/kit.js';
 import { escapeHtml } from './render.js';
 
 const SEEN = 'roots-and-branches-title-seen';
-const LINES = ['ROOTS &', 'BRANCHES'];
+const LINES = ['MAPPING', 'THE ISSUE'];
 // Leaves 4 pixels apart touch, so each letter reads as one solid shape.
 const CELL = 4;
 
@@ -41,7 +41,7 @@ function logoScene(room) {
   const w = width * CELL + 4;
   const h = height * CELL + 4;
   return {
-    alt: 'The title Roots and Branches, spelled out in tiny pixel leaves.',
+    alt: 'The title Mapping The Issue, spelled out in tiny pixel leaves.',
     w,
     h,
     scale: Math.max(1, Math.min(4, Math.floor(room / w))),
@@ -51,7 +51,7 @@ function logoScene(room) {
         // Leaves pop in one after another, then sway gently.
         // About three seconds for the whole logo to grow in.
         if (f < i / 6) return;
-        const gold = cell.y < 6 && cell.x >= textWidth('ROOTS ') ;
+        const gold = cell.y >= 6 && cell.x >= textWidth('THE ');
         const sway = (Math.floor(f / 3) + cell.x) % 6 === 0 ? 1 : 0;
         leaf(c, 2 + cell.x * CELL, 2 + cell.y * CELL + sway, gold ? P.vineGold : i % 5 === 0 ? P.grassLight : P.vineGreen, gold ? P.dirt : P.forestDark);
       });

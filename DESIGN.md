@@ -6,7 +6,7 @@
 
 ## 1. The Big Idea
 
-**ROOTS & BRANCHES** is a vertical, scrolling, **16-bit pixel-art world shaped like one giant tree**. The visitor explores it like a retro platformer, but it's still a website: scrolling, clicking, and tapping all work, and nothing is locked behind "game skill."
+**MAPPING THE ISSUE** is a vertical, scrolling, **16-bit pixel-art world shaped like one giant tree**. The visitor explores it like a retro platformer, but it's still a website: scrolling, clicking, and tapping all work, and nothing is locked behind "game skill."
 
 ```
                 ☁️  CANOPY (conclusion)  ☁️
@@ -99,7 +99,7 @@ Fixed overlay, pixel-styled, unobtrusive:
 ### Surface (Intro)
 - Meadow at the base of a massive trunk. Sunrise sky. Grass sways. A couple of undecided "crowd" NPCs wander.
 - Three wooden **signposts** ("THEY SAY…") + **The Map** signpost (thesis) + **Who Cares** & **So What** signposts.
-- Title screen overlays this on first load: big `ROOTS & BRANCHES` logo built from pixel leaves, `▶ PRESS START` blinking.
+- Title screen overlays this on first load: big `MAPPING THE ISSUE` logo built from pixel leaves, `▶ PRESS START` blinking.
 - After all signposts are opened, a shovel appears: `▼ DIG INTO THE ROOTS`.
 
 ### Underground (Roots)

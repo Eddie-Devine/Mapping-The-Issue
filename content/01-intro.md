@@ -10,8 +10,8 @@
 
 ## Title screen
 
-- **Title:** ROOTS & BRANCHES
-- **Subtitle:** Mapping the Vegetarian Debate from Ancient Roots to Today's Feeds
+- **Title:** MAPPING THE ISSUE
+- **Subtitle:** The Vegetarian Debate, from Ancient Roots to Today's Feeds
 - **Byline:** A Mapping the Issue project
 - **Prompt:** `▶ PRESS START` (or scroll / tap)
 

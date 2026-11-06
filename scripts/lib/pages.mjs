@@ -284,8 +284,8 @@ ${renderTimeline()}
 </footer>`;
 
     return shell({
-      title: 'Read Mode | Roots &amp; Branches',
-      description: 'The full text of Roots &amp; Branches, a map of the vegetarian debate, as a clean, printable article.',
+      title: 'Read Mode | Mapping The Issue',
+      description: 'The full text of Mapping The Issue, a map of the vegetarian debate, as a clean, printable article.',
       body,
       bodyClass: 'read-mode',
     });
@@ -305,8 +305,8 @@ ${hero(
 ${entries}
 </main>`;
     return shell({
-      title: 'Works Cited | Roots &amp; Branches',
-      description: 'Works Cited (MLA 9) for Roots &amp; Branches, a map of the vegetarian debate.',
+      title: 'Works Cited | Mapping The Issue',
+      description: 'Works Cited (MLA 9) for Mapping The Issue, a map of the vegetarian debate.',
       body,
       bodyClass: 'works-cited-page',
     });
