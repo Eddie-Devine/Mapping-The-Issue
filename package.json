@@ -1,0 +1,17 @@
+{
+  "name": "mapping-the-issue",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Roots & Branches: an interactive pixel-art map of the vegetarian debate.",
+  "type": "module",
+  "scripts": {
+    "content": "node scripts/build-content.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "marked": "18.1.3",
+    "vite": "8.3.6"
+  }
+}

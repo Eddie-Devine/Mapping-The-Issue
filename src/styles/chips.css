@@ -1,0 +1,61 @@
+/* Citation chips, shared by the tree world and Read Mode. */
+/* Inline, so a long chip wraps like text and its trailing punctuation stays beside it. */
+.chip {
+  padding: 0.1em 0.4em;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 0.875rem/1 var(--font-ui);
+  text-decoration: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.chip:hover {
+  background: var(--dusk);
+  color: #fff;
+}
+
+.chip:focus-visible {
+  outline: 3px solid var(--dusk);
+  outline-offset: 2px;
+}
+
+/* Chips on dark boxes flip to light so they stay visible. */
+.on-dark .chip,
+.callout-intro .chip,
+.callout-takeaway .chip {
+  background: var(--sky-glow);
+  color: var(--sky-night);
+}
+
+.on-dark .chip:hover {
+  background: var(--sky-peach);
+  color: var(--sky-night);
+}
+
+.on-dark .chip:focus-visible {
+  outline-color: var(--marble);
+}
+
+/* Silkscreen's ampersand looks like a currency sign. */
+.amp {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+/* The chip's full title shows in a bar pinned to the screen, so it can never run off a phone's edge. */
+.chip:hover::after,
+.chip:focus-visible::after {
+  content: attr(data-title);
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 60;
+  width: min(42rem, calc(100vw - 32px));
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--sky-night);
+  border: 2px solid var(--sky-glow);
+  color: var(--marble);
+  font: 400 1.0625rem/1.4 var(--font-body);
+}

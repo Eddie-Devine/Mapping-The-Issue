@@ -1,0 +1,55 @@
+/* The shared world palette from DESIGN.md §2. Mirrored in src/palette.js for canvas art. */
+:root {
+  /* Sky / Canopy */
+  --sky-night: #1b1f3b;
+  --sky-peach: #f6a96b;
+  --sky-glow: #ffe8a3;
+  /* Surface */
+  --grass: #3e8948;
+  --grass-light: #8fd16a;
+  --dirt: #6b4226;
+  /* Taproot */
+  --soil: #2b1d14;
+  --clay: #5a3a22;
+  --fossil: #c9a66b;
+  /* India root */
+  --saffron: #e07a1f;
+  --terracotta: #b5452a;
+  --banyan: #2f6b4f;
+  --gold: #f2d16b;
+  /* Greece root */
+  --marble: #f4efe6;
+  --aegean: #3c7dbf;
+  --olive: #7a8b3a;
+  --pottery: #c95b3b;
+  /* Trunk */
+  --bark-dark: #5b3a29;
+  --bark: #7c5136;
+  --bark-light: #a0714f;
+  /* Vines */
+  --vine-green: #5bd16a;
+  --vine-gold: #f2c14e;
+  --vine-pink: #f28ab2;
+  --vine-red: #e04a3f;
+  /* Branch 1 */
+  --granite: #9aa3ad;
+  --sky-blue: #5fb0e8;
+  /* Branch 2 */
+  --forest: #2f8f4e;
+  --forest-dark: #1f5f3a;
+  --water: #4aa3df;
+  /* Bramble */
+  --thorn: #4b3b47;
+  --thorn-red: #8a2f45;
+  /* Branch 3 */
+  --ember: #d9622b;
+  --ember-deep: #8c2f1c;
+  --leather: #4a2a1a;
+  --dusk: #6b4fa0;
+
+  /* Fonts */
+  --font-title: 'Press Start 2P', ui-monospace, monospace;
+  /* Silkscreen, not Pixelify Sans: Pixelify's C reads as O and its 5 and 9 read as 8, which garbled citation years. */
+  --font-ui: 'Silkscreen', ui-monospace, monospace;
+  --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}

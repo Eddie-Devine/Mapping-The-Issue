@@ -1,0 +1,281 @@
+/* The pixel art layer: textures, scenes, leaf sprites, and the climber. Loads after world.css. */
+
+/* ---------- Scenes ---------- */
+.scene-canvas {
+  display: block;
+  flex: none;
+  image-rendering: pixelated;
+}
+
+.scene-slot {
+  position: absolute;
+  top: var(--top, auto);
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.slot-left { right: 50%; }
+.slot-right { left: 50%; }
+
+/* Knotholes sit beside the trunk where there's room, and on it where there isn't. */
+.slot-knot {
+  right: calc(50% + var(--trunk-width) / 2 + 12px);
+  left: auto;
+  width: 192px;
+}
+
+@media (min-width: 1024px) {
+  /* Same width on all three branches, kept clear of the minimap at the right edge. */
+  .branch .scene-slot,
+  .slot-right {
+    right: 150px;
+  }
+}
+
+@media (max-width: 640px) {
+  .scene-slot {
+    top: var(--phone-top, var(--top, auto));
+  }
+
+  .slot-left,
+  .slot-right {
+    right: 0;
+    left: 0;
+  }
+
+  .slot-knot {
+    right: 0;
+    left: 0;
+    width: auto;
+  }
+}
+
+.bramble-scene,
+.vs-scene,
+.vs-final-scene,
+.rpg-scene {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.bramble-scene {
+  margin: 0.5rem 0;
+}
+
+.rpg-scene {
+  padding: 0 1rem 0.5rem;
+}
+
+.rpg-scene[hidden] {
+  display: none;
+}
+
+.rpg-scene-action {
+  margin-right: auto;
+}
+
+/* On short screens, the text matters more than the picture. */
+@media (max-height: 560px) {
+  .rpg-scene {
+    display: none;
+  }
+
+  .rpg-scene-action {
+    display: none;
+  }
+}
+
+/* Room for the summit scene, so the climber on the top branch shows above the text. */
+.canopy-flow {
+  padding-top: 72px;
+}
+
+/* ---------- Distant background layers ---------- */
+.zone-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plx {
+  position: absolute;
+  right: 0;
+  left: 0;
+  image-rendering: pixelated;
+}
+
+.plx-cloudsFar { top: -800px; bottom: -800px; background: var(--tile-cloudsFar) 0 0 / 768px 600px; }
+.plx-cloudsNear { top: -500px; bottom: -500px; background: var(--tile-cloudsNear) 120px 0 / 768px 768px; }
+.plx-cloudsWarm { top: -400px; bottom: -400px; background: var(--tile-cloudsWarm) 0 0 / 768px 540px; }
+.plx-hillsFar { bottom: 30px; height: 192px; background: var(--tile-hillsFar) 0 100% / 768px 192px repeat-x; }
+.plx-pinesFar { bottom: 20px; height: 168px; background: var(--tile-pinesFar) 0 100% / 576px 168px repeat-x; }
+.plx-peaksFar { top: -64px; height: 240px; background: var(--tile-peaksFar) 0 100% / 768px 240px repeat-x; }
+.plx-canopyFar { top: 0; height: 192px; background: var(--tile-canopyFar) 0 100% / 576px 192px repeat-x; transform-origin: top; }
+.plx-ridgeFar { top: calc(60% - 180px); height: 180px; background: var(--tile-ridgeFar) 0 100% / 768px 180px repeat-x; }
+.plx-ridgeNear { top: calc(60% - 144px); height: 144px; background: var(--tile-ridgeNear) 200px 100% / 768px 144px repeat-x; }
+
+/* ---------- Zone textures ---------- */
+.zone-branch-1,
+.zone-branch-2,
+.zone-branch-3,
+.zone-graft,
+.zone-tangle,
+.stratum,
+.trunk-body,
+.trunk-foot {
+  image-rendering: pixelated;
+}
+
+.zone-branch-1 {
+  background:
+    linear-gradient(var(--sky-blue) 0 176px, transparent 176px),
+    linear-gradient(90deg, var(--sky-blue) 0 10%, transparent 10%),
+    var(--tile-granite) 0 0 / 192px 192px;
+}
+
+.zone-branch-2 {
+  background:
+    linear-gradient(transparent 0 70%, rgb(31 95 58 / 75%) 70%),
+    var(--tile-forest) 0 0 / 144px 144px;
+}
+
+.zone-branch-3 {
+  background:
+    linear-gradient(transparent 0 60%, rgb(140 47 28 / 85%) 60%),
+    var(--tile-ember) 0 0 / 144px 144px;
+}
+
+.zone-graft {
+  background: var(--tile-plankL) 0 0 / 144px 48px;
+}
+
+.zone-graft::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 50%;
+  background: var(--tile-plankR) 0 0 / 144px 48px;
+}
+
+.zone-tangle {
+  background:
+    linear-gradient(var(--sky-glow) 0 10%, var(--sky-peach) 10% 30%, var(--dusk) 30% 70%, transparent 70%),
+    var(--tile-knots) 0 0 / 144px 144px;
+}
+
+.zone-tangle .plx-ridgeFar {
+  top: calc(70% - 180px);
+}
+
+.trunk-body,
+.trunk-foot {
+  overflow: hidden;
+  background: var(--tile-bark) 0 0 / 192px 192px;
+}
+
+.stratum {
+  background-image: var(--tile-soil);
+  background-size: 144px 144px;
+}
+
+.strata-prop {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  image-rendering: pixelated;
+}
+
+.chamber {
+  background-image: var(--tile-bark);
+  background-size: 32px 96px;
+  background-repeat: repeat-y;
+}
+
+.taproot-line {
+  background: var(--tile-bark) 0 0 / 32px 96px;
+  box-shadow: 0 0 0 2px var(--fossil);
+  image-rendering: pixelated;
+}
+
+/* ---------- Storyline vines ---------- */
+.vine {
+  width: 120px;
+  background-size: 120px 288px;
+  background-repeat: repeat-y;
+  image-rendering: pixelated;
+}
+
+.vine-line-green { background-color: transparent; background-image: var(--tile-vineGreen); }
+.vine-line-gold { background-color: transparent; background-image: var(--tile-vineGold); }
+.vine-line-pink { background-color: transparent; background-image: var(--tile-vinePink); }
+.vine-line-red { background-color: transparent; background-image: var(--tile-vineRed); }
+
+/* ---------- Leaves and their kin ---------- */
+.kind-leaf .leaf-sprite { background-image: var(--sprite-leaf); }
+.kind-fossil .leaf-sprite { background-image: var(--sprite-fossil); }
+.kind-lotus .leaf-sprite { background-image: var(--sprite-lotus); }
+.kind-scroll .leaf-sprite { background-image: var(--sprite-scroll); }
+.kind-fruit .leaf-sprite { background-image: var(--sprite-fruit); }
+.kind-leaf.collected .leaf-sprite { background-image: var(--sprite-leaf-done); }
+.kind-fossil.collected .leaf-sprite { background-image: var(--sprite-fossil-done); }
+.kind-lotus.collected .leaf-sprite { background-image: var(--sprite-lotus-done); }
+.kind-scroll.collected .leaf-sprite { background-image: var(--sprite-scroll-done); }
+.kind-fruit.collected .leaf-sprite { background-image: var(--sprite-fruit-done); }
+
+/* A tiny sparkle says "you can click this." It stops once a leaf is collected. */
+.zone.on-screen .leaf-btn:not(.collected)::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--sky-night);
+  animation: leaf-sparkle 2.4s steps(1) infinite;
+}
+
+.leaf-btn:nth-child(3n + 1)::after { animation-delay: -0.8s !important; }
+.leaf-btn:nth-child(3n + 2)::after { animation-delay: -1.6s !important; }
+
+@keyframes leaf-sparkle {
+  0%, 70%, 100% { opacity: 0; }
+  75% { opacity: 1; transform: translate(0, 0); }
+  85% { opacity: 1; transform: translate(-6px, 6px) scale(0.5); }
+  95% { opacity: 1; transform: translate(-22px, 26px) scale(0.5); }
+}
+
+/* ---------- The climber and falling dirt ---------- */
+.climber {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Above the zone backgrounds but behind scenes, text, and leaves, so it never hides any of them. */
+  z-index: 0;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.climber[hidden] {
+  display: none;
+}
+
+.dust {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 14;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+

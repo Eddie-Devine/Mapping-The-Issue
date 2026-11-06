@@ -1,0 +1,7 @@
+node_modules/
+dist/
+
+# Generated from content/ and SOURCES.md by scripts/build-content.mjs
+src/data/
+read.html
+works-cited.html

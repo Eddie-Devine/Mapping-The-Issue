@@ -1,0 +1,870 @@
+/* The vertical world's layout. Textures and pixel art are in art.css. */
+@import './palette.css';
+
+/* The camera keeps the visitor's place itself when the world resizes, so the browser shouldn't also try. */
+html {
+  overflow-anchor: none;
+}
+
+#world {
+  display: block;
+  /* clip, not hidden: hidden would break the sticky zone labels. */
+  overflow-x: clip;
+  --trunk-width: clamp(192px, 24vw, 320px);
+}
+
+.zone {
+  position: relative;
+  /* Keeps a label's margin inside its zone. Otherwise it pushes the zone down and leaves a gap above it. */
+  display: flow-root;
+}
+
+/* ---------- Zone labels ---------- */
+/* Clicks pass through, so a label sliding over a leaf never blocks it. */
+.plate {
+  position: sticky;
+  top: 72px;
+  z-index: 2;
+  width: fit-content;
+  max-width: min(32rem, calc(100% - 32px));
+  margin: 16px;
+  padding: 0.625rem 0.875rem;
+  background: var(--sky-night);
+  color: var(--marble);
+  pointer-events: none;
+  box-shadow:
+    0 -4px 0 0 var(--marble),
+    0 4px 0 0 var(--marble),
+    -4px 0 0 0 var(--marble),
+    4px 0 0 0 var(--marble);
+}
+
+.plate h1,
+.plate h2 {
+  margin: 0 0 0.375rem;
+  color: var(--sky-glow);
+  font-family: var(--font-title);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.plate h1 {
+  font-size: clamp(1.25rem, 5vw, 2.25rem);
+}
+
+.plate h2 {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+}
+
+.plate h1:focus,
+.plate h2:focus {
+  outline: none;
+}
+
+.plate p {
+  margin: 0.25rem 0 0;
+}
+
+.plate-role {
+  font: 400 1rem/1.4 var(--font-ui);
+  overflow-wrap: anywhere;
+}
+
+.plate-tagline {
+  font: 400 1.125rem/1.4 var(--font-body);
+}
+
+/* ---------- Text panels in the world ---------- */
+.zone-top {
+  position: relative;
+  /* Above the sticky label, which comes earlier in the page: text must never be hidden behind it. */
+  z-index: 2;
+  padding: 0 16px;
+}
+
+.zone-bottom {
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  left: 0;
+  z-index: 2;
+  padding: 0 16px;
+}
+
+.zone-tagline {
+  width: fit-content;
+  margin: 0 0 12px;
+  padding: 0.25rem 0.625rem;
+  background: var(--marble);
+  color: var(--sky-night);
+  font: italic 400 1.125rem/1.4 var(--font-body);
+}
+
+.world-callout {
+  max-width: min(44rem, 100%);
+  margin: 0 auto;
+  padding: 0.875rem 1rem;
+  background: var(--sky-night);
+  color: var(--marble);
+  font: 400 1.125rem/1.55 var(--font-body);
+  overflow-wrap: break-word;
+  box-shadow:
+    0 -4px 0 0 var(--marble),
+    0 4px 0 0 var(--marble),
+    -4px 0 0 0 var(--marble),
+    4px 0 0 0 var(--marble);
+}
+
+.world-callout p {
+  margin: 0 0 0.625rem;
+}
+
+.world-callout > :last-child,
+.world-callout li:last-child {
+  margin-bottom: 0;
+}
+
+.world-callout ul {
+  margin: 0 0 0.625rem;
+  padding-left: 1.25rem;
+}
+
+.world-callout strong {
+  color: var(--sky-glow);
+}
+
+/* ---------- Leaves ---------- */
+/* Clicks pass through the field, so only the leaves themselves are targets. */
+.leaf-field {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* The minimap sits at the right edge on wide screens. All three branches keep the same
+   width beside it, so they stay the same size as each other. */
+@media (min-width: 1024px) {
+  .branch .leaf-field,
+  .zone-root-greece .leaf-field {
+    right: 150px;
+  }
+
+  .zone-taproot .leaf-field {
+    right: 150px;
+  }
+}
+
+.trunk-field {
+  right: auto;
+  left: 50%;
+  width: var(--trunk-width);
+  transform: translateX(-50%);
+}
+
+.leaf-btn {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.leaf-btn[hidden] {
+  display: none;
+}
+
+.leaf-sprite {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-position: center;
+  background-size: 48px 48px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  /* A dark edge keeps the leaf visible on every zone color. */
+  filter: drop-shadow(2px 0 0 var(--sky-night)) drop-shadow(-2px 0 0 var(--sky-night)) drop-shadow(0 2px 0 var(--sky-night)) drop-shadow(0 -2px 0 var(--sky-night));
+}
+
+/* Only animates while the zone is near the screen. Stepped, like a two-frame sprite. */
+.zone.on-screen .leaf-sprite {
+  animation: leaf-bob 1.2s steps(2, jump-none) infinite alternate;
+}
+
+.leaf-btn:nth-child(3n + 1) .leaf-sprite { animation-delay: -0.4s; }
+.leaf-btn:nth-child(3n + 2) .leaf-sprite { animation-delay: -0.8s; }
+
+@keyframes leaf-bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+.leaf-btn:hover .leaf-sprite,
+.leaf-btn:focus-visible .leaf-sprite {
+  filter: drop-shadow(0 0 0 var(--sky-glow)) drop-shadow(3px 0 0 var(--sky-glow)) drop-shadow(-3px 0 0 var(--sky-glow)) drop-shadow(0 3px 0 var(--sky-glow)) drop-shadow(0 -3px 0 var(--sky-glow));
+}
+
+.leaf-btn:focus-visible {
+  outline: 3px solid var(--marble);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--sky-night);
+}
+
+/* The title is always there for screen readers, and shows on hover or keyboard focus. */
+.leaf-label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 6px);
+  z-index: 5;
+  width: max-content;
+  max-width: min(16rem, 60vw);
+  transform: translateY(-50%);
+  padding: 0.25rem 0.5rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 700 1rem/1.3 var(--font-body);
+  text-align: left;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px var(--sky-glow);
+  opacity: 0;
+}
+
+.leaf-btn.label-left .leaf-label {
+  right: calc(100% + 6px);
+  left: auto;
+}
+
+.leaf-btn:hover .leaf-label,
+.leaf-btn:focus-visible .leaf-label {
+  opacity: 1;
+}
+
+.leaf-btn.hero {
+  transform: scale(1.34);
+}
+
+/* Trunk leaves wear their storyline's color. */
+.leaf-btn.vine-green { --leaf-ring: var(--vine-green); }
+.leaf-btn.vine-gold { --leaf-ring: var(--vine-gold); }
+.leaf-btn.vine-pink { --leaf-ring: var(--vine-pink); }
+.leaf-btn.vine-red { --leaf-ring: var(--vine-red); }
+
+.trunk-field .leaf-btn::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 4px solid var(--leaf-ring);
+  background: var(--sky-night);
+}
+
+.trunk-field .leaf-sprite {
+  position: relative;
+}
+
+/* ---------- Sky and crown ---------- */
+.zone-canopy {
+  background: linear-gradient(var(--sky-night) 0 18%, var(--dusk) 18% 38%, var(--sky-peach) 38% 72%, var(--sky-glow) 72%);
+}
+
+.canopy-flow {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 32px;
+}
+
+.canopy-count {
+  color: var(--sky-glow);
+  font: 400 1.0625rem/1.4 var(--font-ui);
+}
+
+.final-line {
+  text-align: center;
+}
+
+.final-line-big {
+  width: fit-content;
+  max-width: 100%;
+  margin: 24px auto;
+  padding: 0.75rem 1rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 clamp(1rem, 3.4vw, 1.625rem) / 1.6 var(--font-title);
+}
+
+.canopy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.zone-tangle {
+  background: linear-gradient(var(--sky-glow) 0 10%, var(--sky-peach) 10% 30%, var(--dusk) 30% 70%, var(--ember-deep) 70%);
+}
+
+.vs-splash {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.vs-splash-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background: var(--sky-night);
+  color: var(--marble);
+  font: 400 clamp(0.875rem, 3vw, 1.5rem) / 1.5 var(--font-title);
+}
+
+.vs-splash-title b {
+  color: var(--sky-glow);
+  font-size: 1.75em;
+  font-weight: 400;
+}
+
+.vs-splash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.crown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto var(--branch-height);
+  grid-template-areas:
+    'graft graft stem'
+    'b1 b2 b3';
+}
+
+#branch-1 { grid-area: b1; }
+#branch-2 { grid-area: b2; }
+#branch-3 { grid-area: b3; }
+#graft { grid-area: graft; }
+.crown-stem { grid-area: stem; }
+
+/* Two-color planks: the two branches fused together. */
+.zone-graft {
+  background: linear-gradient(90deg, var(--granite) 0 50%, var(--forest) 50%);
+}
+
+.graft-flow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 0 16px 32px;
+}
+
+/* Two overlapping leaves, with stepped pixel corners. */
+.venn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: min(36rem, 100%);
+}
+
+.venn-leaf {
+  flex: 1 1 50%;
+  min-height: 136px;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  color: var(--sky-night);
+  font: 400 0.9375rem/1.4 var(--font-ui);
+  cursor: pointer;
+  clip-path: polygon(0 16px, 16px 16px, 16px 0, calc(100% - 16px) 0, calc(100% - 16px) 16px, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 16px calc(100% - 16px), 0 calc(100% - 16px));
+}
+
+.venn-left {
+  padding-right: 22%;
+  background: var(--sky-blue);
+}
+
+.venn-right {
+  padding-left: 22%;
+  background: var(--grass-light);
+}
+
+.venn-middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36%;
+  min-height: 88px;
+  transform: translate(-50%, -50%);
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  background: var(--sky-glow);
+  color: var(--sky-night);
+  font: 400 0.9375rem/1.3 var(--font-ui);
+  cursor: pointer;
+  box-shadow: 0 0 0 4px var(--sky-night);
+}
+
+.venn-leaf:hover,
+.venn-middle:hover {
+  background: var(--sky-peach);
+}
+
+.venn-leaf:focus-visible,
+.venn-middle:focus-visible {
+  outline: 3px solid var(--marble);
+  outline-offset: -8px;
+}
+
+.graft-signs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Branch 3 reaches up past the graft toward the Tangle. */
+.crown-stem {
+  background:
+    linear-gradient(var(--ember), var(--ember)) 50% 0 / 64px 100% no-repeat,
+    var(--sky-blue);
+}
+
+.zone-branch-1 {
+  background: linear-gradient(90deg, var(--sky-blue) 0 25%, var(--granite) 25%);
+}
+
+.zone-branch-2 {
+  background: linear-gradient(var(--forest) 0 70%, var(--forest-dark) 70%);
+}
+
+.zone-branch-3 {
+  background: linear-gradient(var(--ember) 0 60%, var(--ember-deep) 60%);
+}
+
+.branch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.bramble-patch {
+  margin-top: 16px;
+  padding: 0.75rem 1rem;
+  background: var(--thorn);
+  color: var(--marble);
+  font: 400 1.0625rem/1.5 var(--font-body);
+  box-shadow:
+    0 -4px 0 0 var(--thorn-red),
+    0 4px 0 0 var(--thorn-red),
+    -4px 0 0 0 var(--thorn-red),
+    4px 0 0 0 var(--thorn-red);
+}
+
+.bramble-patch h3 {
+  margin: 0 0 0.375rem;
+  color: var(--sky-glow);
+  font: 700 1.125rem/1.3 var(--font-body);
+}
+
+.bramble-patch p {
+  margin: 0 0 0.5rem;
+}
+
+.bramble-patch strong {
+  color: var(--sky-glow);
+}
+
+.bramble-leaves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bramble-leaves .leaf-btn {
+  position: relative;
+}
+
+/* ---------- Signposts ---------- */
+.signposts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: min(44rem, 100%);
+}
+
+.signs-label {
+  width: fit-content;
+  margin: 0;
+  padding: 0.125rem 0.625rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 1rem/1.5 var(--font-ui);
+}
+
+.signposts .signs-label {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.graft-signs .signs-label {
+  flex-basis: 100%;
+  width: auto;
+  text-align: center;
+}
+
+.sign-btn {
+  min-height: 52px;
+  padding: 0.375rem 0.625rem;
+  border: 0;
+  border-bottom: 6px solid var(--bark-dark);
+  background: var(--bark-dark);
+  color: var(--marble);
+  font: 400 0.9375rem/1.3 var(--font-ui);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px var(--sky-night);
+}
+
+.sign-btn:hover {
+  background: var(--leather);
+}
+
+.sign-btn.collected {
+  border-bottom-color: var(--vine-gold);
+}
+
+.sign-btn:focus-visible {
+  outline: 3px solid var(--marble);
+  outline-offset: 3px;
+}
+
+.dig-hint {
+  margin: 0;
+  padding: 0.25rem 0.625rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 1rem/1.5 var(--font-ui);
+  text-align: center;
+}
+
+.dig-hint[hidden],
+.dig-btn[hidden] {
+  display: none;
+}
+
+/* ---------- Trunk ---------- */
+.zone-trunk {
+  background: linear-gradient(var(--sky-blue) 0 80%, var(--sky-peach) 80%);
+}
+
+.trunk-body,
+.trunk-foot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--trunk-width);
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(90deg, var(--bark-dark) 0 16px, var(--bark) 16px 48px, var(--bark-light) 48px 64px);
+}
+
+/* Placeholder vines: straight for now, spiraling in Phase 4. */
+.vine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  transform: translateX(-50%);
+}
+
+.vine[hidden] {
+  display: none;
+}
+
+.vine-line-green { left: 12.5%; background: var(--vine-green); }
+.vine-line-gold { left: 37.5%; background: var(--vine-gold); }
+.vine-line-pink { left: 62.5%; background: var(--vine-pink); }
+.vine-line-red { left: 87.5%; background: var(--vine-red); }
+
+.rings {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  left: calc(50% + var(--trunk-width) / 2);
+  padding-left: 8px;
+  border-bottom: 2px solid var(--sky-night);
+  color: var(--sky-night);
+  font: 400 1rem/1.3 var(--font-ui);
+}
+
+.vine-filter {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 6px;
+  margin-top: 0.5rem;
+  pointer-events: auto;
+}
+
+.vine-toggle {
+  min-height: 44px;
+  padding: 0.25rem 0.5rem;
+  border: 3px solid var(--vine-color);
+  background: var(--vine-color);
+  color: var(--sky-night);
+  font: 400 0.875rem/1 var(--font-ui);
+  cursor: pointer;
+}
+
+.vine-toggle.vine-green { --vine-color: var(--vine-green); }
+.vine-toggle.vine-gold { --vine-color: var(--vine-gold); }
+.vine-toggle.vine-pink { --vine-color: var(--vine-pink); }
+.vine-toggle.vine-red { --vine-color: var(--vine-red); }
+
+.vine-toggle[aria-pressed='false'] {
+  background: var(--sky-night);
+  color: var(--marble);
+  text-decoration: line-through;
+}
+
+.vine-toggle:focus-visible {
+  outline: 3px solid var(--marble);
+  outline-offset: 2px;
+}
+
+.trunk-top {
+  position: absolute;
+  top: 224px;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.trunk-top > * {
+  pointer-events: auto;
+}
+
+.branch-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px auto 0;
+}
+
+.climb-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  z-index: 2;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 1rem/1.4 var(--font-ui);
+}
+
+/* ---------- Surface ---------- */
+.zone-surface {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(var(--sky-peach) 0 45%, var(--sky-glow) 45%);
+}
+
+.surface-stack {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px 24px;
+}
+
+.plate-title {
+  position: static;
+  margin: 4px;
+  text-align: center;
+}
+
+.ground {
+  position: relative;
+  z-index: 1;
+  height: 48px;
+  background:
+    repeating-linear-gradient(90deg, var(--grass) 0 8px, var(--grass-light) 8px 16px, var(--grass) 16px 32px, var(--forest) 32px 40px) 0 0 / 100% 16px no-repeat,
+    linear-gradient(var(--grass), var(--grass)) 0 16px / 100% 32px no-repeat;
+}
+
+/* ---------- Underground ---------- */
+.underground {
+  position: relative;
+}
+
+.strata {
+  position: absolute;
+  inset: 0;
+}
+
+.stratum {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 4px solid var(--soil);
+}
+
+.stratum-label {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  padding: 0 0.5rem;
+  background: var(--sky-night);
+  color: var(--sky-glow);
+  font: 400 0.875rem/1.7 var(--font-ui);
+}
+
+.roots {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chamber {
+  height: 100%;
+  background-image: linear-gradient(var(--root-color), var(--root-color));
+  background-position: 50% 0;
+  background-size: 32px 100%;
+  background-repeat: no-repeat;
+}
+
+/* Sits below the soil line, so only soil and root tips peek in at the Surface. */
+.chamber .plate {
+  margin-top: 128px;
+}
+
+.zone-root-india {
+  --root-color: var(--saffron);
+  background-color: color-mix(in srgb, var(--terracotta) 45%, transparent);
+}
+
+.zone-root-greece {
+  --root-color: var(--marble);
+  background-color: color-mix(in srgb, var(--aegean) 70%, transparent);
+}
+
+.zone-taproot {
+  background: color-mix(in srgb, var(--soil) 60%, transparent);
+}
+
+.taproot-line {
+  position: absolute;
+  top: 0;
+  bottom: 160px;
+  left: 50%;
+  width: 32px;
+  transform: translateX(-50%);
+  background: var(--fossil);
+}
+
+/* Stays clear of the floating READ MODE and MAP buttons, since nothing scrolls past the world's end. */
+.taproot-end {
+  bottom: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.grow-btn {
+  white-space: nowrap;
+}
+
+/* ---------- Tablets and phones: branches stack so the climb runs in assignment order ---------- */
+/* Going up: Branch 1, Branch 2, The Graft, Branch 3, The Tangle, The Canopy. */
+@media (max-width: 900px) {
+  .crown {
+    display: block;
+  }
+
+  .crown-stem {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .plate {
+    top: 60px;
+    max-width: calc(100% - 24px);
+    margin: 12px;
+    padding: 0.5rem 0.625rem;
+  }
+
+  .plate-title {
+    margin: 4px;
+    max-width: 100%;
+  }
+
+  .stratum-label {
+    right: 8px;
+  }
+
+  .zone-top,
+  .zone-bottom {
+    padding: 0 12px;
+  }
+
+  .signposts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sign-btn {
+    min-height: 48px;
+    font-size: 0.875rem;
+  }
+
+  .surface-stack {
+    gap: 10px;
+    padding-bottom: 16px;
+  }
+
+  .venn-leaf,
+  .venn-middle {
+    font-size: 0.8125rem;
+  }
+}
+
+/* The very smallest phones: the counter stacks under the year, so labels start lower. */
+@media (max-width: 359px) {
+  .plate {
+    top: 96px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vine-toggle {
+    padding: 0.25rem 0.375rem;
+    font-size: 0.8125rem;
+  }
+}
+

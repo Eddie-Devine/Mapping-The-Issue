@@ -1,0 +1,514 @@
+/* Read Mode and Works Cited: clean, printable pages in the site's colors. */
+@import './palette.css';
+@import './chips.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--marble);
+  color: var(--sky-night);
+  font: 400 1.1875rem/1.65 var(--font-body);
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--forest-dark);
+  text-underline-offset: 0.15em;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--dusk);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--sky-glow);
+  color: var(--sky-night);
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  background: var(--sky-night);
+  color: var(--marble);
+}
+
+.hero-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 16px 2rem;
+}
+
+.hero h1 {
+  margin: 0 0 1.25rem;
+  color: var(--sky-glow);
+  font: 400 clamp(1.5rem, 6vw, 2.75rem) / 1.35 var(--font-title);
+}
+
+.subtitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.3125rem;
+  line-height: 1.4;
+}
+
+.byline {
+  margin: 0;
+  color: var(--sky-peach);
+}
+
+.top-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1.25rem;
+  font: 400 1.125rem/1.4 var(--font-ui);
+}
+
+.top-links a {
+  color: var(--sky-glow);
+}
+
+.top-links a:focus-visible {
+  outline-color: var(--sky-glow);
+}
+
+/* A strip of pixel grass, drawn with hard-edged gradients. */
+.hero-grass {
+  height: 24px;
+  background:
+    repeating-linear-gradient(90deg, var(--grass) 0 8px, var(--grass-light) 8px 16px, var(--grass) 16px 32px, var(--forest) 32px 40px) 0 0 / 100% 8px no-repeat,
+    linear-gradient(var(--grass), var(--grass)) 0 8px / 100% 8px no-repeat,
+    repeating-linear-gradient(90deg, var(--dirt) 0 24px, var(--clay) 24px 32px) 0 16px / 100% 8px no-repeat;
+}
+
+/* ---------- Layout ---------- */
+.toc,
+main,
+.page-footer {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+
+.toc {
+  padding-block: 2rem 0.5rem;
+}
+
+.toc h2 {
+  margin: 0 0 0.75rem;
+}
+
+.toc ol {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.toc-note {
+  color: var(--thorn);
+}
+
+.toc-note::before {
+  content: '— ';
+}
+
+.page-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-block: 2rem 3rem;
+  font: 400 1.125rem/1.4 var(--font-ui);
+}
+
+/* ---------- Headings ---------- */
+/* Section titles are pixel art; leaf titles stay in the body font so long ones are easy to read. */
+h2 {
+  margin: 0 0 1rem;
+  font: 400 clamp(1.125rem, 3.6vw, 1.5rem) / 1.5 var(--font-title);
+}
+
+h3,
+h4,
+h5 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h3 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.625rem;
+}
+
+h4 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.375rem;
+}
+
+h5 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.heading-note {
+  font-weight: 400;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--thorn);
+  font: 400 1.125rem/1.4 var(--font-ui);
+}
+
+.tagline {
+  margin: 0 0 1.5rem;
+  font-size: 1.3125rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ---------- Sections ---------- */
+.part {
+  --accent: var(--sky-night);
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 8px solid var(--accent);
+}
+
+.zone-surface { --accent: var(--grass); }
+.zone-branch-1 { --accent: var(--aegean); }
+.zone-branch-2 { --accent: var(--forest); }
+.zone-branch-3 { --accent: var(--ember); }
+.zone-graft { --accent: var(--olive); }
+.zone-tangle { --accent: var(--dusk); }
+.zone-canopy { --accent: var(--sky-peach); }
+
+.leaf {
+  scroll-margin-top: 1rem;
+}
+
+.leaf:target {
+  background: var(--sky-glow);
+  outline: 8px solid var(--sky-glow);
+}
+
+.leaf p {
+  margin: 0 0 0.75rem;
+}
+
+.leaf-group.vine-green { --vine: var(--vine-green); }
+.leaf-group.vine-gold { --vine: var(--vine-gold); }
+.leaf-group.vine-pink { --vine: var(--vine-pink); }
+.leaf-group.vine-red { --vine: var(--vine-red); }
+.leaf-group.bramble { --vine: var(--thorn-red); }
+
+.leaf-group[class*='vine-'],
+.leaf-group.bramble {
+  margin-top: 2.5rem;
+  padding-left: 1rem;
+  border-left: 8px solid var(--vine);
+}
+
+.leaf-group > h3:first-child,
+.leaf-group > h4:first-child {
+  margin-top: 0;
+}
+
+.also-cited {
+  color: var(--thorn);
+}
+
+.support-line {
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border-left: 4px solid var(--vine-pink);
+}
+
+/* ---------- Pixel-framed boxes ---------- */
+.callout,
+.position-card {
+  /* Square shadows on each side leave the corners notched, like an RPG menu box. */
+  --frame: var(--accent, var(--sky-night));
+  margin: 2rem 4px;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  box-shadow:
+    0 -4px 0 0 var(--frame),
+    0 4px 0 0 var(--frame),
+    -4px 0 0 0 var(--frame),
+    4px 0 0 0 var(--frame);
+}
+
+.callout > :first-child,
+.position-card > :first-child {
+  margin-top: 0;
+}
+
+.callout > :last-child,
+.position-card > :last-child {
+  margin-bottom: 0;
+}
+
+.callout-intro,
+.callout-takeaway {
+  background: var(--sky-night);
+  color: var(--marble);
+}
+
+.callout-intro a:not(.chip),
+.callout-takeaway a:not(.chip) {
+  color: var(--sky-glow);
+}
+
+.callout-intro strong,
+.callout-takeaway strong {
+  color: var(--sky-glow);
+}
+
+.position-card h4 {
+  margin-top: 1.25rem;
+  font: 400 1.125rem/1.4 var(--font-ui);
+}
+
+.position-card h4 .heading-note {
+  font: 400 1.0625rem/1.4 var(--font-body);
+}
+
+.position-card p,
+.position-card ol,
+.position-card ul {
+  margin-block: 0.25rem;
+}
+
+.final-line {
+  margin: 2rem 0;
+  font: 400 1.5rem/1.4 var(--font-ui);
+  text-align: center;
+}
+
+.final-line-big {
+  font: 400 clamp(1.125rem, 4.5vw, 1.625rem) / 1.6 var(--font-title);
+}
+
+.to-works-cited {
+  font: 400 1.125rem/1.4 var(--font-ui);
+  text-align: center;
+}
+
+/* ---------- Tables ---------- */
+table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th,
+td {
+  padding: 0.625rem 0.75rem;
+  border: 2px solid var(--sky-night);
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--sky-night);
+  color: var(--marble);
+  font: 400 1.0625rem/1.3 var(--font-ui);
+}
+
+tbody th {
+  font-weight: 700;
+}
+
+.timeline-table th[scope='row'] {
+  width: 22%;
+}
+
+/* On phones, each table row stacks into a labeled card so the page never scrolls sideways. */
+@media (max-width: 640px) {
+  table.stacking thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  table.stacking,
+  table.stacking tbody,
+  table.stacking tr,
+  table.stacking th,
+  table.stacking td {
+    display: block;
+    width: 100%;
+  }
+
+  table.stacking tr {
+    margin-bottom: 1rem;
+    border: 2px solid var(--sky-night);
+  }
+
+  table.stacking th,
+  table.stacking td {
+    border: 0;
+  }
+
+  table.stacking tbody th {
+    background: var(--sky-night);
+    color: var(--marble);
+  }
+
+  table.stacking td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--thorn);
+    /* Body font: these labels can contain an ampersand, and attr() text can't be wrapped in .amp. */
+    font: 700 1rem/1.4 var(--font-body);
+  }
+
+  .timeline-table th[scope='row'] {
+    width: 100%;
+  }
+}
+
+/* ---------- Works Cited ---------- */
+.works-cited {
+  padding-block: 2rem 4rem;
+}
+
+.entry {
+  margin: 0 0 0.5rem;
+  padding-left: 0.5in;
+  text-indent: -0.5in;
+  line-height: 2;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 1rem;
+}
+
+.entry:target {
+  background: var(--sky-glow);
+  outline: 8px solid var(--sky-glow);
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .skip-link,
+  .top-links,
+  .page-footer,
+  .hero-grass,
+  .toc,
+  .to-works-cited {
+    display: none;
+  }
+
+  .hero {
+    background: none;
+    color: #000;
+  }
+
+  .hero-inner {
+    padding: 0 16px 1rem;
+  }
+
+  .hero h1,
+  .byline {
+    color: #000;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    break-after: avoid;
+  }
+
+  .part {
+    border-top: 2px solid #000;
+  }
+
+  .callout,
+  .callout-intro,
+  .callout-takeaway,
+  .position-card {
+    background: none;
+    color: #000;
+    margin: 1rem 0;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .callout-intro strong,
+  .callout-takeaway strong {
+    color: #000;
+  }
+
+  .chip,
+  .callout-intro .chip,
+  .callout-takeaway .chip {
+    background: none;
+    color: #000;
+    padding: 0;
+    font: 400 0.85em/1.5 var(--font-body);
+  }
+
+  .chip::after {
+    display: none;
+  }
+
+  thead th {
+    background: none;
+    color: #000;
+  }
+
+  th,
+  td {
+    border-color: #000;
+  }
+
+  .leaf,
+  .entry {
+    break-inside: avoid;
+  }
+
+  .leaf:target,
+  .entry:target {
+    background: none;
+    outline: 0;
+  }
+}
